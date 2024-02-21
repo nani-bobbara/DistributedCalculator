@@ -1,0 +1,147 @@
+﻿@page "/"
+
+<div class="calculator dark-theme">
+    <div class="display-area">@Result</div>
+    <div class="row">
+        <button class="function-button" @onclick="Clear">AC</button>
+        <button class="function-button" @onclick="Negate">+/-</button>
+        <button class="function-button" @onclick="Percent">%</button>
+        <button class="operation-button" @onclick="() => SetOperation(Operation.Divide)">÷</button>
+    </div>
+    <div class="row">
+        <button class="number-button" @onclick="() => AddNumber(7)">7</button>
+        <button class="number-button" @onclick="() => AddNumber(8)">8</button>
+        <button class="number-button" @onclick="() => AddNumber(9)">9</button>
+        <button class="operation-button" @onclick="() => SetOperation(Operation.Multiply)">x</button>
+    </div>
+    <div class="row">
+        <button class="number-button" @onclick="() => AddNumber(4)">4</button>
+        <button class="number-button" @onclick="() => AddNumber(5)">5</button>
+        <button class="number-button" @onclick="() => AddNumber(6)">6</button>
+        <button class="operation-button" @onclick="() => SetOperation(Operation.Subtract)">-</button>
+    </div>
+    <div class="row">
+        <button class="number-button" @onclick="() => AddNumber(1)">1</button>
+        <button class="number-button" @onclick="() => AddNumber(2)">2</button>
+        <button class="number-button" @onclick="() => AddNumber(3)">3</button>
+        <button class="operation-button" @onclick="() => SetOperation(Operation.Add)">+</button>
+    </div>
+    <div class="row">
+        <button class="zero-button" @onclick="() => AddNumber(0)">0</button>
+        <button class="number-button" @onclick="AddDecimal">.</button>
+        <button class="operation-button" @onclick="Calculate">=</button>
+    </div>
+</div>
+
+<style>
+    .calculator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 414px;
+        height: 896px;
+        background-color: #1c1c1e; /* Dark theme background color */
+    }
+
+    .display-area, .row {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        padding: 10px 0;
+        color: white;
+    }
+
+    .number-button, .zero-button, .function-button, .operation-button {
+        width: 85px;
+        height: 75px;
+        border-radius: 50%;
+        border: none;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .number-button, .zero-button, .function-button {
+        background-color: #3a3a3c; /* Dark theme button color */
+    }
+
+    .operation-button {
+        background-color: #ff9500; /* Operation button color */
+    }
+
+    .zero-button {
+        width: 130px;
+        border-radius: 40px;
+    }
+</style>
+
+@code {
+    double FirstNumber { get; set; }
+    double SecondNumber { get; set; }
+    string Result { get; set; } = "";
+    enum Operation { Add, Subtract, Multiply, Divide }
+    Operation CurrentOperation { get; set; }
+
+    void AddNumber(int number)
+    {
+        Result += number.ToString();
+        SecondNumber = double.Parse(Result);
+    }
+
+    void Clear()
+    {
+        Result = "";
+        FirstNumber = 0;
+        SecondNumber = 0;
+    }
+
+    void Negate()
+    {
+        SecondNumber *= -1;
+        Result = SecondNumber.ToString();
+    }
+
+    void Percent()
+    {
+        SecondNumber /= 100;
+        Result = SecondNumber.ToString();
+    }
+
+    void SetOperation(Operation operation)
+    {
+        FirstNumber = SecondNumber;
+        Result = "";
+        CurrentOperation = operation;
+    }
+
+    void AddDecimal()
+    {
+        if (!Result.Contains("."))
+        {
+            Result += ".";
+        }
+    }
+
+    void Calculate()
+    {
+        switch (CurrentOperation)
+        {
+            case Operation.Add:
+                Result = (FirstNumber + SecondNumber).ToString();
+                break;
+            case Operation.Subtract:
+                Result = (FirstNumber - SecondNumber).ToString();
+                break;
+            case Operation.Multiply:
+                Result = (FirstNumber * SecondNumber).ToString();
+                break;
+            case Operation.Divide:
+                Result = (FirstNumber / SecondNumber).ToString();
+                break;
+        }
+
+        FirstNumber = 0;
+        SecondNumber = double.Parse(Result);
+    }
+}

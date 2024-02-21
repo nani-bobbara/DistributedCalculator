@@ -1,0 +1,70 @@
+﻿@page "/calculator"
+
+<div class="calculator">
+    <div class="display">@Result</div>
+
+    <div class="buttons">
+        @for (int i = 1; i <= 9; i++)
+        {
+            int number = i;
+            <button class="button" @onclick="() => AddNumber(number)">@number</button>
+        }
+
+        <button class="button" @onclick="() => AddNumber(0)">0</button>
+        <button class="button" @onclick="Clear">C</button>
+        <button class="button" @onclick="Calculate">=</button>
+    </div>
+</div>
+
+<style>
+    .calculator {
+        width: 200px;
+        background-color: #a5a5a5;
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    .display {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        text-align: right;
+        font-size: 2em;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .button {
+        padding: 20px;
+        font-size: 2em;
+        border: none;
+        border-radius: 50%;
+        color: white;
+        background-color: #333333;
+    }
+</style>
+
+@code {
+    string Result { get; set; } = "";
+
+    void AddNumber(int number)
+    {
+        Result += number.ToString();
+    }
+
+    void Clear()
+    {
+        Result = "";
+    }
+
+    void Calculate()
+    {
+        // Add your calculation logic here
+    }
+}

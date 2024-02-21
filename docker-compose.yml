@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  
+  addition-service:
+    build: 
+      context: ./AdditionService
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+  subtraction-service:
+    build: 
+      context: ./SubtractionService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+  multiplication-service:
+    build: 
+      context: ./MultiplicationService
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+  division-service:
+    build: 
+      context: ./DivisionService
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5003"
+  history-service:
+    build: 
+      context: ./HistoryService
+      dockerfile: Dockerfile
+    ports:
+      - "5004:5004"
+    depends_on:
+      - redis
+      - rabbitmq
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+
+  calculator-app:
+    build: 
+      context: ./CalculatorApp
+      dockerfile: Dockerfile
+    ports:
+      - "5005:5005"
